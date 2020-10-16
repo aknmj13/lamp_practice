@@ -6,6 +6,9 @@ require_once MODEL_PATH . 'item.php';
 
 session_start();
 
+//POSTから取得したトークンをチェックし、空またはセッションのトークンと異なればログアウト
+token_purge();
+
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
@@ -30,6 +33,5 @@ if($changes_to === 'open'){
 }else {
   set_error('不正なリクエストです。');
 }
-
 
 redirect_to(ADMIN_URL);
