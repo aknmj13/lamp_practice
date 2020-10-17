@@ -6,6 +6,9 @@ require_once MODEL_PATH . 'item.php';
 
 session_start();
 
+//POSTから取得したトークンをチェックし、空またはセッションのトークンと異なればログアウト
+token_purge();
+
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
@@ -26,7 +29,5 @@ if(destroy_item($db, $item_id) === true){
 } else {
   set_error('商品削除に失敗しました。');
 }
-
-
 
 redirect_to(ADMIN_URL);

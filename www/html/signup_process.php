@@ -5,6 +5,9 @@ require_once MODEL_PATH . 'user.php';
 
 session_start();
 
+//POSTから取得したトークンをチェックし、空またはセッションのトークンと異なればログアウト
+token_purge();
+
 if(is_logined() === true){
   redirect_to(HOME_URL);
 }

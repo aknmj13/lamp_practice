@@ -7,6 +7,9 @@ require_once MODEL_PATH . 'cart.php';
 
 session_start();
 
+//POSTから取得したトークンをチェックし、空またはセッションのトークンと異なればログアウト
+token_purge();
+
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
@@ -18,17 +21,10 @@ $token = get_post('csrf_token');
 
 $item_id = get_post('item_id');
 
-//セッションに登録済のトークンと一致しているか判定
-if(is_valid_token($token) === true){
-  if(add_cart($db,$user['user_id'], $item_id)){
-    set_message('カートに商品を追加しました。');
-  } else {
-    set_error('カートの更新に失敗しました。');
-  }
+if(add_cart($db,$user['user_id'], $item_id)){
+  set_message('カートに商品を追加しました。');
 } else {
-  redirect_to(LOGOUT_URL);
+  set_error('カートの更新に失敗しました。');
 }
-
-$token = delete_csrf_token($token);
 
 redirect_to(HOME_URL);

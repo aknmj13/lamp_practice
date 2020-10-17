@@ -20,4 +20,8 @@ if(is_admin($user) === false){
 
 $items = get_all_items($db);
 $items = h_assoc_array($items);
+
+//トークンを生成し、フォームに埋め込むトークンの盗難を防ぐ
+$token = set_csrf_security();
+
 include_once VIEW_PATH . '/admin_view.php';

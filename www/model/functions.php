@@ -138,7 +138,11 @@ function is_valid_upload_image($image){
 
 
 function h($str){
-  return htmlspecialchars($str,ENT_QUOTES,'UTF-8');
+  if(is_numeric($str) === true){
+    return $str;
+  }else{
+    return htmlspecialchars($str,ENT_QUOTES,'UTF-8');
+  }
 }
 
 function h_assoc_array($assoc_array){
@@ -172,4 +176,18 @@ function delete_csrf_token($token){
 
 function protect_from_jack() {
   header('X-FRAME-OPTIONS: DENY');
+}
+
+function token_purge(){
+  $token = get_post('csrf_token');
+
+  if(is_valid_token($token) === false){
+    redirect_to(LOGOUT_URL);
+  }
+}
+
+function set_csrf_security(){
+  $token = get_csrf_token();
+  protect_from_jack();
+  return $token;
 }
