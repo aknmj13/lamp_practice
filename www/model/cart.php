@@ -101,7 +101,7 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql, array(':cart_id' => $cart_id));
 }
 
-function purchase_carts($db, $carts){
+function purchase_carts($db, $carts, $user_id){
   if(validate_cart_purchase($carts) === false){
     return false;
   }
@@ -115,7 +115,7 @@ function purchase_carts($db, $carts){
     }
   }
   
-  delete_user_carts($db, $carts[0]['user_id']);
+  transaction($db, $carts, $user_id);
 }
 
 function delete_user_carts($db, $user_id){
@@ -157,3 +157,46 @@ function validate_cart_purchase($carts){
   return true;
 }
 
+function insert_orders_data($db, $carts, $user_id){
+  $order_id = insert_order_history($db, $user_id);
+  foreach($carts as $cart){
+    insert_order_details($db, $order_id, $cart['item_id'], $cart['price'], $cart['amount']);
+  }
+}
+
+function insert_order_history($db, $user_id){
+  $sql = "
+    INSERT INTO
+      order_history (user_id)
+    VALUES (:user_id);
+    ";
+
+  return get_lastInsertId($db, $sql, 'order_id', array(':user_id' => $user_id));
+}
+
+function insert_order_details($db, $order_id, $item_id, $price, $amount){
+  $sql = "
+    INSERT INTO
+      order_details (
+        order_id,
+        item_id,
+        price,
+        amount
+      )
+    VALUES (:order_id, :item_id, :price, :amount);";
+
+  return execute_query($db, $sql, array(':order_id' => $order_id, ':item_id' => $item_id, ':price' => $price, ':amount' => $amount));
+}
+
+function transaction($db, $carts, $user_id){
+  $db->beginTransaction();
+  try{
+    insert_orders_data($db, $carts, $user_id);
+    delete_user_carts($db, $carts[0]['user_id']);
+    $db->commit();
+  }catch(PDOException $e){
+    $db->rollback();
+    set_error('更新に失敗しました');
+  }
+  return false;
+}
