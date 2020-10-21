@@ -4,22 +4,17 @@ require_once MODEL_PATH . 'functions.php';
 require_once MODEL_PATH . 'user.php';
 require_once MODEL_PATH . 'item.php';
 require_once MODEL_PATH . 'cart.php';
+require_once MODEL_PATH . 'order_.php';
 
 session_start();
 
 if(is_logined() === false){
   redirect_to(LOGIN_URL);
 }
-
 $db = get_db_connect();
 $user = get_login_user($db);
-$carts = get_user_carts($db, $user['user_id']);
-$carts = h_assoc_array($carts);
 
-$total_price = sum_carts($carts);
-$total_price = h($total_price);
+$histories = get_order_history($db);
+$histories = h_assoc_array($histories);
 
-//トークンを生成
-$token = set_csrf_security();
-
-include_once VIEW_PATH . 'cart_view.php';
+include_once '../view/order_history_view.php';
