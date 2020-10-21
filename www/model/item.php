@@ -206,3 +206,38 @@ function is_valid_item_status($status){
   }
   return $is_valid;
 }
+
+function get_sort_items($db){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+    WHERE status = 1
+    ';
+
+   $sql .= sort_items_order();
+
+  return fetch_all_query($db, $sql);
+}
+
+function sort_items_order(){
+  if(get_get('cheap')){
+    return '
+      ORDER BY price
+    ';
+  } else if(get_get('expensive')){
+    return '
+      ORDER BY price DESC
+    ';
+  } else {
+    return '
+      ORDER BY created DESC
+    ';
+  }
+}

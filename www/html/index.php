@@ -12,8 +12,12 @@ if(is_logined() === false){
 
 $db = get_db_connect();
 $user = get_login_user($db);
+$sort_new = get_get('new');
+$sort_cheap = get_get('cheap');
+$sort_expensive = get_get('expensive');
 
-$items = get_open_items($db);
+//$items = get_open_items($db);
+$items = get_sort_items($db);
 $items = h_assoc_array($items);
 
 //トークンを生成し、フォームに埋め込むトークンの盗難を防ぐ
