@@ -9,12 +9,20 @@
 <body>
   <?php include VIEW_PATH . 'templates/header_logined.php'; ?>
   
-
   <div class="container">
     <h1>商品一覧</h1>
     <?php include VIEW_PATH . 'templates/messages.php'; ?>
-
     <div class="card-deck">
+      <div id="sort-form">
+        <form>
+          <select name="change_sort" id="">
+            <option selected id="" name="new" value="new">新着順</option>
+            <option name="cheap" value="cheap">価格の安い順</option>
+            <option name="expensive" value="expensive">価格の高い順</option>
+          </select>
+          <input type="submit" name="sort_button">
+        </form>
+      </div>
       <div class="row">
       <?php foreach($items as $item){ ?>
         <div class="col-6 item">
@@ -43,6 +51,7 @@
       </div>
     </div>
   </div>
-  
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.4/jquery.min.js"></script>
+  <script type="text/javascript" src="<?php print(JS_PATH . 'index.js'); ?>"></script>
 </body>
 </html>

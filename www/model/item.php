@@ -206,3 +206,45 @@ function is_valid_item_status($status){
   }
   return $is_valid;
 }
+
+function get_sort_items($db){
+  $sql = '
+    SELECT
+      item_id, 
+      name,
+      stock,
+      price,
+      image,
+      status
+    FROM
+      items
+    WHERE status = 1
+    ';
+
+   $sql .= sort_items_order();
+
+  return fetch_all_query($db, $sql);
+}
+
+function sort_items_order(){
+  if(get_get('change_sort') === 'cheap'){
+    return '
+      ORDER BY price
+    ';
+  } else if(get_get('change_sort') === 'expensive'){
+    return '
+      ORDER BY price DESC
+    ';
+  } else {
+    return '
+      ORDER BY created DESC
+    ';
+  }
+}
+
+function get_js_data(){
+  header('Content-type: application/json; charset=utf-8');
+  $data = filter_input(INPUT_GET, 'change_sort');
+
+  return $data;
+}

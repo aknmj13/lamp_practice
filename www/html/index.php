@@ -13,7 +13,13 @@ if(is_logined() === false){
 $db = get_db_connect();
 $user = get_login_user($db);
 
-$items = get_open_items($db);
+
+$items = get_sort_items($db);
+//$items = get_open_items($db);
+if ($change_sort = get_get('sort_button')){
+  // dd(get_get('change_sort'));
+  $items = get_sort_items($db);
+}
 $items = h_assoc_array($items);
 
 //トークンを生成し、フォームに埋め込むトークンの盗難を防ぐ
