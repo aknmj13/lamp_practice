@@ -1,6 +1,14 @@
 $(function(){
-    const selected = $("select[name=change_sort]");
-    selected.on('change', function(){
-        window.location.href = selected.val();
-    });
-});
+    $('select').change(function(){
+        let val = $(this).val();
+        console.log(val);
+        // $.ajax({
+            // type: "GET",
+            // url: "index.php",
+            // data: {'change_sort': val},
+            // dataType: "json",
+            // scriptCharset: 'utf-8'
+        // })
+        
+    })
+})

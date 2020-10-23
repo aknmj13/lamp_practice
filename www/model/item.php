@@ -227,11 +227,11 @@ function get_sort_items($db){
 }
 
 function sort_items_order(){
-  if(get_get('cheap')){
+  if(get_get('change_sort') === 'cheap'){
     return '
       ORDER BY price
     ';
-  } else if(get_get('expensive')){
+  } else if(get_get('change_sort') === 'expensive'){
     return '
       ORDER BY price DESC
     ';
@@ -240,4 +240,11 @@ function sort_items_order(){
       ORDER BY created DESC
     ';
   }
+}
+
+function get_js_data(){
+  header('Content-type: application/json; charset=utf-8');
+  $data = filter_input(INPUT_GET, 'change_sort');
+
+  return $data;
 }

@@ -20,6 +20,7 @@
             <option name="cheap" value="cheap">価格の安い順</option>
             <option name="expensive" value="expensive">価格の高い順</option>
           </select>
+          <input type="submit" name="sort_button">
         </form>
       </div>
       <div class="row">
